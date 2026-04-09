@@ -20,7 +20,7 @@
 /* eslint-disable */
 window.Module = null;
 
-(function (Promise) {
+(function () {
    /**
     * IALoader
     */
@@ -2630,7 +2630,7 @@ window.Module = null;
    window.CloudpilotLoader = CloudpilotLoader;
    window.Emulator = Emulator;
    window._SDL_CreateRGBSurfaceFrom = _SDL_CreateRGBSurfaceFrom;
- })(typeof Promise === 'undefined' ? ES6Promise.Promise : Promise);
+ })();
 
 // legacy
 var JSMESS = JSMESS || {};
