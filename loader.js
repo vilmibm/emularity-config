@@ -2536,10 +2536,10 @@ globalThis.Module = null;
      if (xml instanceof XMLDocument) {
        xml = xml.documentElement;
      }
-     var dict = {};
-     var len = xml.childNodes.length, i;
-     for (i = 0; i < len; i++) {
-       var node = xml.childNodes[i];
+     const dict = {};
+     const len = xml.childNodes.length;
+     for (let i = 0; i < len; i++) {
+       const node = xml.childNodes[i];
        dict[node.nodeName] = node.textContent;
      }
      return dict;
