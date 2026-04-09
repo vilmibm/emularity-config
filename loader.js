@@ -2634,7 +2634,7 @@ globalThis.Module = null;
  })();
 
 // legacy
-var JSMESS = JSMESS || {};
+const JSMESS = JSMESS || {};
 JSMESS.ready = function (f) { f(); };
 
 // Local Variables:
