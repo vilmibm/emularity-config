@@ -2557,7 +2557,7 @@ globalThis.Module = null;
                                         return "getAttribute" in node;
                                       })
                               .map(function (node) {
-                                     var file = dict_from_xml(node);
+                                     const file = dict_from_xml(node);
                                      file.name = node.getAttribute("name");
                                      return file;
                               });
@@ -2580,7 +2580,7 @@ globalThis.Module = null;
      if (typeof regex == "string")
        regex = RegExp(regex);
      return Object.keys(meta).map(function (k) {
-                                    var match = regex.exec(k);
+                                    const match = regex.exec(k);
                                     if (match)
                                       return [k, match];
                                     return null;
