@@ -2594,16 +2594,17 @@ globalThis.Module = null;
      // TODO: Actually fill pixel data to created surface.
      // TODO: Take into account depth and pitch parameters.
      // console.log('TODO: Partially unimplemented SDL_CreateRGBSurfaceFrom called!');
-     var surface = SDL.makeSurface(width, height, 0, false, 'CreateRGBSurfaceFrom', rmask, gmask, bmask, amask);
+     const surface = SDL.makeSurface(width, height, 0, false,
+       'CreateRGBSurfaceFrom', rmask, gmask, bmask, amask);
 
-     var surfaceData = SDL.surfaces[surface];
-     var surfaceImageData = surfaceData.ctx.getImageData(0, 0, width, height);
-     var surfacePixelData = surfaceImageData.data;
+     const surfaceData = SDL.surfaces[surface];
+     const surfaceImageData = surfaceData.ctx.getImageData(0, 0, width, height);
+     const surfacePixelData = surfaceImageData.data;
 
      // Fill pixel data to created surface.
      // Supports SDL_PIXELFORMAT_RGBA8888 and SDL_PIXELFORMAT_RGB888
-     var channels = amask ? 4 : 3; // RGBA8888 or RGB888
-     for (var pixelOffset = 0; pixelOffset < width*height; pixelOffset++) {
+     const channels = amask ? 4 : 3; // RGBA8888 or RGB888
+     for (let pixelOffset = 0; pixelOffset < width*height; pixelOffset++) {
        surfacePixelData[pixelOffset*4+0] = HEAPU8[pixels + (pixelOffset*channels+0)]; // R
        surfacePixelData[pixelOffset*4+1] = HEAPU8[pixels + (pixelOffset*channels+1)]; // G
        surfacePixelData[pixelOffset*4+2] = HEAPU8[pixels + (pixelOffset*channels+2)]; // B
