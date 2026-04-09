@@ -2590,7 +2590,7 @@ globalThis.Module = null;
                              });
    }
 
-   function _SDL_CreateRGBSurfaceFrom(pixels, width, height, depth, pitch, rmask, gmask, bmask, amask) {
+   function _SDL_CreateRGBSurfaceFrom(pixels, width, height, _depth, _pitch, rmask, gmask, bmask, amask) {
      // TODO: Actually fill pixel data to created surface.
      // TODO: Take into account depth and pitch parameters.
      // console.log('TODO: Partially unimplemented SDL_CreateRGBSurfaceFrom called!');
