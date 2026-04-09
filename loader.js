@@ -2512,8 +2512,8 @@ globalThis.Module = null;
        return b;
      if (b === null)
        return a;
-     var ta = typeof a,
-         tb = typeof b;
+     const ta = typeof a;
+     const tb = typeof b;
      if (ta !== tb) {
        if (ta === 'undefined')
          return b;
