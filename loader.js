@@ -18,7 +18,7 @@
   */
 
 /* eslint-disable */
-window.Module = null;
+globalThis.Module = null;
 
 (function () {
    /**
@@ -92,7 +92,7 @@ window.Module = null;
      }
 
      var SAMPLE_RATE = (function () {
-                          var audio_ctx = window.AudioContext || window.webkitAudioContext || false;
+                          var audio_ctx = globalThis.AudioContext || globalThis.webkitAudioContext || false;
                           if (!audio_ctx) {
                             return false;
                           }
@@ -212,7 +212,7 @@ window.Module = null;
                                              throw new Error("Unknown module type "+ module +"; cannot configure the emulator.");
                                            }
 
-                                           var wantsWASM = modulecfg.wasm_filename && 'WebAssembly' in window;
+                                           var wantsWASM = modulecfg.wasm_filename && 'WebAssembly' in globalThis;
                                            var nr = modulecfg['native_resolution'];
                                            config_args = [cfgr.emulatorJS(get_js_url(wantsWASM ? modulecfg.wasmjs_filename : modulecfg.js_filename)),
                                                           cfgr.emulatorWASM(wantsWASM && get_js_url(modulecfg.wasm_filename)),
@@ -479,8 +479,8 @@ window.Module = null;
      }
 
      function get_ruffle_files(cfgr, metadata, modulecfg, filelist) {
-       window.RufflePlayer = window.RufflePlayer || {};
-       window.RufflePlayer.config = modulecfg.config;
+       globalThis.RufflePlayer = globalThis.RufflePlayer || {};
+       globalThis.RufflePlayer.config = modulecfg.config;
        var files = [];
        var meta = dict_from_xml(metadata);
        var game_files = files_with_ext_from_filelist(filelist, meta.emulator_ext);
@@ -1309,9 +1309,9 @@ window.Module = null;
    EmscriptenRunner.prototype.mute = function () {
      try {
        mute_protection();
-       if (!window.SDL_PauseAudio)
-         window.SDL_PauseAudio = Module.cwrap('SDL_PauseAudio', '', ['number']);
-       window.SDL_PauseAudio(true);
+       if (!globalThis.SDL_PauseAudio)
+         globalThis.SDL_PauseAudio = Module.cwrap('SDL_PauseAudio', '', ['number']);
+       globalThis.SDL_PauseAudio(true);
      } catch (x) {
        console.log("Unable to change audio state:", x);
      }
@@ -1320,9 +1320,9 @@ window.Module = null;
    EmscriptenRunner.prototype.unmute = function () {
      try {
        mute_protection();
-       if (!window.SDL_PauseAudio)
-         window.SDL_PauseAudio = Module.cwrap('SDL_PauseAudio', '', ['number']);
-       window.SDL_PauseAudio(false);
+       if (!globalThis.SDL_PauseAudio)
+         globalThis.SDL_PauseAudio = Module.cwrap('SDL_PauseAudio', '', ['number']);
+       globalThis.SDL_PauseAudio(false);
      } catch (x) {
        console.log("Unable to change audio state:", x);
      }
@@ -1776,9 +1776,9 @@ window.Module = null;
        }
        else {
          try {
-           if (!window.SDL_PauseAudio)
-             window.SDL_PauseAudio = Module.cwrap('SDL_PauseAudio', '', ['number']);
-           window.SDL_PauseAudio(state);
+           if (!globalThis.SDL_PauseAudio)
+             globalThis.SDL_PauseAudio = Module.cwrap('SDL_PauseAudio', '', ['number']);
+           globalThis.SDL_PauseAudio(state);
          } catch (x) {
            console.log("Unable to change audio state:", x);
          }
@@ -1790,14 +1790,14 @@ window.Module = null;
      // we don't listen for them then the browser won't tell us about
      // them.
      // TODO: add hooks so that some kind of UI can be displayed.
-     window.addEventListener("gamepadconnected",
+     globalThis.addEventListener("gamepadconnected",
                              function (e) {
                                console.log("Gamepad connected at index %d: %s. %d buttons, %d axes.",
                                            e.gamepad.index, e.gamepad.id,
                                            e.gamepad.buttons.length, e.gamepad.axes.length);
                              });
 
-     window.addEventListener("gamepaddisconnected",
+     globalThis.addEventListener("gamepaddisconnected",
                              function (e) {
                                console.log("Gamepad disconnected from index %d: %s",
                                            e.gamepad.index, e.gamepad.id);
@@ -1994,7 +1994,7 @@ window.Module = null;
                                                                                 return null;
                                                                               });
                                                  // this is kinda wrong; it really only applies when we're loading something created by Emscripten
-                                                 if ('emulatorWASM' in game_data && game_data.emulatorWASM && 'WebAssembly' in window) {
+                                                 if ('emulatorWASM' in game_data && game_data.emulatorWASM && 'WebAssembly' in globalThis) {
                                                    promises.push(fetch({ title: "WASM Binary", url: game_data.emulatorWASM }).then(function (data) { game_data.wasmBinary = data; }));
                                                  }
                                                  Promise.all(promises).then(resolve, reject);
@@ -2014,7 +2014,7 @@ window.Module = null;
                                              splash.spinning = false;
 
                                              // stashes these event listeners so that we can remove them after
-                                             window.addEventListener('keypress', k = keyevent(resolve));
+                                             globalThis.addEventListener('keypress', k = keyevent(resolve));
                                              canvas.addEventListener('click', c = resolve);
                                              splash.splashElt.addEventListener('click', c);
                                            });
@@ -2033,7 +2033,7 @@ window.Module = null;
                         return null;
                       }
                       splash.spinning = true;
-                      window.removeEventListener('keypress', k);
+                      globalThis.removeEventListener('keypress', k);
                       canvas.removeEventListener('click', c);
                       splash.splashElt.removeEventListener('click', c);
 
@@ -2425,7 +2425,7 @@ window.Module = null;
          }
          return true;
        }
-       window.onkeydown = keypress;
+       globalThis.onkeydown = keypress;
      }
 
      /**
@@ -2615,21 +2615,21 @@ window.Module = null;
      return surface;
    }
 
-   window.IALoader = IALoader;
-   window.DosBoxLoader = DosBoxLoader;
-   window.PC98DosBoxLoader = PC98DosBoxLoader;
-   window.JSMESSLoader = MAMELoader; // depreciated; just for backwards compatibility
-   window.JSMAMELoader = MAMELoader; // ditto
-   window.MAMELoader = MAMELoader;
-   window.SAELoader = SAELoader;
-   window.PCELoader = PCELoader;
-   window.VICELoader = VICELoader;
-   window.NP2Loader = NP2Loader;
-   window.V86Loader = V86Loader;
-   window.RuffleLoader = RuffleLoader;
-   window.CloudpilotLoader = CloudpilotLoader;
-   window.Emulator = Emulator;
-   window._SDL_CreateRGBSurfaceFrom = _SDL_CreateRGBSurfaceFrom;
+   globalThis.IALoader = IALoader;
+   globalThis.DosBoxLoader = DosBoxLoader;
+   globalThis.PC98DosBoxLoader = PC98DosBoxLoader;
+   globalThis.JSMESSLoader = MAMELoader; // depreciated; just for backwards compatibility
+   globalThis.JSMAMELoader = MAMELoader; // ditto
+   globalThis.MAMELoader = MAMELoader;
+   globalThis.SAELoader = SAELoader;
+   globalThis.PCELoader = PCELoader;
+   globalThis.VICELoader = VICELoader;
+   globalThis.NP2Loader = NP2Loader;
+   globalThis.V86Loader = V86Loader;
+   globalThis.RuffleLoader = RuffleLoader;
+   globalThis.CloudpilotLoader = CloudpilotLoader;
+   globalThis.Emulator = Emulator;
+   globalThis._SDL_CreateRGBSurfaceFrom = _SDL_CreateRGBSurfaceFrom;
  })();
 
 // legacy
