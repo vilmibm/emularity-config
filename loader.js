@@ -2285,7 +2285,7 @@ globalThis.Module = null;
        splash.titleElt.textContent = " ";
        splash.splashElt.appendChild(splash.titleElt);
 
-       var table = document.getElementById("emularity-progress-indicator");
+       let table = document.getElementById("emularity-progress-indicator");
        if (!table) {
          table = document.createElement('table');
          table.classList.add("emularity-progress-indicator");
