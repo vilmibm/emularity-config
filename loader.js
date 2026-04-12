@@ -1742,25 +1742,22 @@ globalThis.Module = null;
        callbacks = { before_emulator: null,
                      before_run: callbacks };
      }
-     var js_url;
-     var requests = [];
-     var drawloadingtimer;
-     // TODO: Have an enum value that communicates the current state of the emulator, e.g. 'initializing', 'loading', 'running'.
-     var has_started = false;
-     var loading = false;
-     var defaultSplashColors = { foreground: 'white',
-                                 background: 'black',
-                                 failure: 'red' };
-     var splash = { loading_text: "",
-                    spinning: true,
-                    finished_loading: false,
-                    colors: defaultSplashColors,
-                    table: null,
-                    splashimg: new Image() };
+     // TODO: Have an enum value that communicates the current state of the
+     // emulator, e.g. 'initializing', 'loading', 'running'.
+     let has_started = false;
+     const defaultSplashColors = { foreground: 'white',
+                                   background: 'black',
+                                   failure: 'red' };
+     const splash = { loading_text: "",
+                      spinning: true,
+                      finished_loading: false,
+                      colors: defaultSplashColors,
+                      table: null,
+                      splashimg: new Image() };
 
-     var runner;
+     let runner;
 
-     var muted = false;
+     let muted = false;
      this.isMuted = function () { return muted; };
      this.mute = function () { return this.setMute(true); };
      this.unmute = function () { return this.setMute(false); };
@@ -1803,13 +1800,13 @@ globalThis.Module = null;
                                            e.gamepad.index, e.gamepad.id);
                              });
 
-     var css_resolution, aspectRatio;
+     let css_resolution, aspectRatio;
      // right off the bat we set the canvas's inner dimensions to
      // whatever it's current css dimensions are; this isn't likely to be
      // the same size that dosbox/jsmame will set it to, but it avoids
      // the case where the size was left at the default 300x150
      if (!canvas.hasAttribute("width")) {
-       var style = getComputedStyle(canvas);
+       const style = getComputedStyle(canvas);
        canvas.width = parseInt(style.width, 10);
        canvas.height = parseInt(style.height, 10);
      }
