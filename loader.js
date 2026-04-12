@@ -2095,7 +2095,7 @@ globalThis.Module = null;
                     });
 
        function setup_runner() {
-         var runner = new game_data.runner(canvas, game_data);
+         const runner = new game_data.runner(canvas, game_data);
          resizeCanvas(canvas, game_data.scale, game_data.nativeResolution, game_data.aspectRatio);
          runner.onStarted(function () {
                             splash.finished_loading = true;
