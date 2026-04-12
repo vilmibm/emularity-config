@@ -1403,7 +1403,7 @@ globalThis.Module = null;
      this._cfg = this._sae.getConfig();
      this._canvas = canvas;
 
-     var model = null;
+     let model = null;
      switch (game_data.amigaModel) {
        case "A500": model = SAEC_Model_A500; break;
        case "A500P": model = SAEC_Model_A500P; break;
@@ -1455,7 +1455,7 @@ globalThis.Module = null;
        this._cfg.memory.extRom.size = this._cfg.memory.extRom.data.length;
      }
 
-     for (var i = 0; i < Object.keys(game_data.floppy).length; i++) {
+     for (let i = 0; i < Object.keys(game_data.floppy).length; i++) {
        this._cfg.floppy.drive[i].file.name = game_data.floppy[i];
        this._cfg.floppy.drive[i].file.data = game_data.fs.readFileSync('/' + game_data.floppy[i], null, flag_r);
        this._cfg.floppy.drive[i].file.size = this._cfg.floppy.drive[i].file.data.length;
@@ -1463,7 +1463,7 @@ globalThis.Module = null;
    }
 
    SAERunner.prototype.start = function () {
-     var err = this._sae.start();
+     this._sae.start();
    };
 
    SAERunner.prototype.pause = function () {
@@ -1475,14 +1475,14 @@ globalThis.Module = null;
    };
 
    SAERunner.prototype.mute = function () {
-     var err = this._sae.mute(true);
+     const err = this._sae.mute(true);
      if (err) {
        console.warn("unable to mute; SAE error number", err);
      }
    };
 
    SAERunner.prototype.unmute = function () {
-     var err = this._sae.mute(false);
+     const err = this._sae.mute(false);
      if (err) {
        console.warn("unable to unmute; SAE error number", err);
      }
