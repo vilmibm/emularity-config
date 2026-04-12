@@ -1380,20 +1380,23 @@ globalThis.Module = null;
    function MAMERunner() {
      return EmscriptenRunner.apply(this, arguments);
    }
-   MAMERunner.prototype = Object.create(EmscriptenRunner.prototype,
-                                        { mute: { value: function () {
-                                                           var machine = Module.__ZN15running_machine30emscripten_get_running_machineEv();
-                                                           var soundmgr = Module.__ZN15running_machine20emscripten_get_soundEv(machine);
-                                                           Module.__ZN13sound_manager4muteEbh(soundmgr, true, 0x02); // MUTE_REASON_UI
-                                                         },
-                                                },
-                                          unmute: { value: function () {
-                                                             var machine = Module.__ZN15running_machine30emscripten_get_running_machineEv();
-                                                             var soundmgr = Module.__ZN15running_machine20emscripten_get_soundEv(machine);
-                                                             Module.__ZN13sound_manager4muteEbh(soundmgr, false, 0x02); // MUTE_REASON_UI
-                                                           },
-                                                  },
-                                        });
+   MAMERunner.prototype = Object.create(
+     EmscriptenRunner.prototype,
+     { mute: {
+         value: function () {
+           const machine = Module.__ZN15running_machine30emscripten_get_running_machineEv();
+           const soundmgr = Module.__ZN15running_machine20emscripten_get_soundEv(machine);
+           Module.__ZN13sound_manager4muteEbh(soundmgr, true, 0x02); // MUTE_REASON_UI
+         },
+       },
+       unmute: {
+         value: function () {
+             const machine = Module.__ZN15running_machine30emscripten_get_running_machineEv();
+             const soundmgr = Module.__ZN15running_machine20emscripten_get_soundEv(machine);
+             Module.__ZN13sound_manager4muteEbh(soundmgr, false, 0x02); // MUTE_REASON_UI
+           },
+         },
+     });
 
    /*
     * SAERunner
