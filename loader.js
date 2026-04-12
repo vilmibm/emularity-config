@@ -2356,7 +2356,7 @@ globalThis.Module = null;
 
      function attach_script(js_url) {
        return new Promise(function (resolve, reject) {
-                            var newScript;
+                            let newScript;
                             function loaded(e) {
                               if (e.target == newScript) {
                                 newScript.removeEventListener("load", loaded);
@@ -2372,7 +2372,7 @@ globalThis.Module = null;
                               }
                             }
                             if (js_url) {
-                              var head = document.getElementsByTagName('head')[0];
+                              const head = document.getElementsByTagName('head')[0];
                               newScript = document.createElement('script');
                               newScript.addEventListener("load", loaded);
                               newScript.addEventListener("error", failed);
