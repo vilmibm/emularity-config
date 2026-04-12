@@ -782,7 +782,7 @@ globalThis.Module = null;
    }
 
    BaseLoader.canvas = function (id) {
-     var elem = id instanceof Element ? id : document.getElementById(id);
+     const elem = id instanceof Element ? id : document.getElementById(id);
      return { canvas: elem };
    };
 
@@ -855,7 +855,7 @@ globalThis.Module = null;
     * DosBoxLoader
     */
    function DosBoxLoader() {
-     var config = Array.prototype.reduce.call(arguments, extend);
+     const config = Array.prototype.reduce.call(arguments, extend);
      config.emulator_arguments = build_dosbox_arguments(config.emulatorStart, config.files, config.extra_dosbox_args);
      config.runner = EmscriptenRunner;
      return config;
@@ -883,7 +883,7 @@ globalThis.Module = null;
     * PC98DosBoxLoader
     */
    function PC98DosBoxLoader() {
-    var config = Array.prototype.reduce.call(arguments, extend);
+    const config = Array.prototype.reduce.call(arguments, extend);
     config.emulator_arguments = build_dosbox_arguments(config.emulatorStart, config.files, config.extra_dosbox_args);
     config.runner = PC98DosBoxRunner;
     return config;
@@ -894,7 +894,7 @@ globalThis.Module = null;
     * MAMELoader
     */
    function MAMELoader() {
-     var config = Array.prototype.reduce.call(arguments, extend);
+     const config = Array.prototype.reduce.call(arguments, extend);
      config.emulator_arguments = build_mame_arguments(config.muted, config.mame_driver,
                                                       config.nativeResolution, config.sample_rate,
                                                       config.peripheral, config.autoboot,
@@ -910,7 +910,7 @@ globalThis.Module = null;
    };
 
    MAMELoader.peripheral = function (peripheral, game) {
-     var p = {};
+     const p = {};
      p[peripheral] = [game];
      return { peripheral: p };
    };
@@ -931,7 +931,7 @@ globalThis.Module = null;
     * VICELoader
     */
     function VICELoader() {
-      var config = Array.prototype.reduce.call(arguments, extend);
+      const config = Array.prototype.reduce.call(arguments, extend);
       if (config.fliplist) {
           VICELoader._create_fliplist_file(config.files, config.fliplist);
       }
@@ -951,7 +951,7 @@ globalThis.Module = null;
         return { fliplist: fliplist };
     };
     VICELoader._create_fliplist_file = function(files, fliplists) {
-       var fliplist = "# Vice fliplist file\n\n";
+       let fliplist = "# Vice fliplist file\n\n";
        fliplists.forEach(function(drive_fliplist, i) {
            if(drive_fliplist) {
                drive_fliplist = drive_fliplist.reverse();
@@ -969,7 +969,7 @@ globalThis.Module = null;
     */
 
    function SAELoader() {
-     var config = Array.prototype.reduce.call(arguments, extend);
+     const config = Array.prototype.reduce.call(arguments, extend);
      config.runner = SAERunner;
      return config;
    }
@@ -984,13 +984,14 @@ globalThis.Module = null;
    };
 
    SAELoader.rom = function (filenames) {
-     if (typeof filenames == "string")
+     if (typeof filenames == "string") {
        filenames = [filenames];
+     }
      return { rom: filenames[0], extRom: filenames[1] };
    };
 
    SAELoader.floppy = function (index, filename) {
-     var f = {};
+     const f = {};
      f[index] = filename;
      return { floppy: f };
    };
@@ -1004,7 +1005,7 @@ globalThis.Module = null;
     */
 
    function PCELoader() {
-     var config = Array.prototype.reduce.call(arguments, extend);
+     const config = Array.prototype.reduce.call(arguments, extend);
      config.emulator_arguments = ["-c", "/emulator/pce-"+ config.pceModel +".cfg"];
      if (config.extra_pce_args && config.extra_pce_args.length > 0) {
        config.emulator_arguments = config.emulator_arguments.concat(config.extra_pce_args);
@@ -1026,7 +1027,7 @@ globalThis.Module = null;
     * RuffleLoader
     */
    function RuffleLoader () {
-     var config = Array.prototype.reduce.call(arguments, extend);
+     const config = Array.prototype.reduce.call(arguments, extend);
      config.runner = RuffleRunner;
      return config;
    }
@@ -1046,7 +1047,7 @@ globalThis.Module = null;
     * same author, it may simply be better to rename it instead.
     */
    function NP2Loader() {
-     var config = Array.prototype.reduce.call(arguments, extend);
+     const config = Array.prototype.reduce.call(arguments, extend);
      if (!config.emulatorStart) {
        throw new Error("You must specify an autoLoad value in order to start this emulator. Try the name of the disk image.");
      }
@@ -1064,7 +1065,7 @@ globalThis.Module = null;
    };
 
    function CloudpilotLoader() {
-     var config = Array.prototype.reduce.call(arguments, extend);
+     const config = Array.prototype.reduce.call(arguments, extend);
      config.runner = CloudpilotRunner;
      return config;
    }
@@ -1072,7 +1073,7 @@ globalThis.Module = null;
      if (typeof filenames == "string") {
        filenames = [filenames];
      }
-     var roms = {};
+     const roms = {};
      // Assume one .bin file (Palm BIOS ROM), and one .img file (freshly booted session image).
      roms.bios = filenames.find((f) => f.match(/\.bin$/i));
      roms.session = filenames.find((f) => f.match(/\.img$/i));
@@ -1087,7 +1088,7 @@ globalThis.Module = null;
     * V86Loader
     */
    function V86Loader() {
-     var config = Array.prototype.reduce.call(arguments, extend);
+     const config = Array.prototype.reduce.call(arguments, extend);
      config.memory_size = config.memory_size || 32;
      config.vga_memory_size = config.vga_memory_size || 2;
      config.boot_order = config.boot_order || 0x213;
