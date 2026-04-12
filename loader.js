@@ -1864,23 +1864,23 @@ globalThis.Module = null;
        return this;
      };
 
-     var start = function (options) {
+     const start = function (options) {
        if (has_started)
          return false;
        has_started = true;
-       var defaultOptions = { waitAfterDownloading: false,
-                              hasCustomCSS: false };
+       const defaultOptions = { waitAfterDownloading: false,
+                                hasCustomCSS: false };
        if (typeof options !== 'object') {
          options = defaultOptions;
        } else {
          options.__proto__ = defaultOptions;
        }
 
-       var k, c, game_data;
+       let k, c, game_data;
        setupSplash(canvas, splash, options);
        drawsplash();
 
-       var loading;
+       let loading;
 
        if (typeof loadFiles === 'function') {
          loading = loadFiles(fetch_file, splash);
@@ -1889,14 +1889,14 @@ globalThis.Module = null;
        }
        loading.then(function (_game_data) {
                       return new Promise(function(resolve, reject) {
-                        var InMemoryFS = BrowserFS.FileSystem.InMemory;
+                        const InMemoryFS = BrowserFS.FileSystem.InMemory;
                         InMemoryFS.Create(function (e, inMemory) {
                           // If the browser supports IndexedDB storage, mirror writes to that storage
                           // for persistence purposes.
                           if (BrowserFS.FileSystem.IndexedDB.isAvailable()) {
-                            var AsyncMirrorFS = BrowserFS.FileSystem.AsyncMirror,
-                                IndexedDBFS = BrowserFS.FileSystem.IndexedDB,
-                                fileSystemKey = "fileSystemKey" in _game_data ? _game_data.fileSystemKey
+                            const AsyncMirrorFS = BrowserFS.FileSystem.AsyncMirror;
+                            const IndexedDBFS = BrowserFS.FileSystem.IndexedDB;
+                            const fileSystemKey = "fileSystemKey" in _game_data ? _game_data.fileSystemKey
                                                                               : "emularity";
                             IndexedDBFS.Create({ storeName: fileSystemKey },
                                                function(e, idbfs) {
@@ -1912,17 +1912,17 @@ globalThis.Module = null;
                           }
                         });
 
-                        function finish(e, deltaFS) {
+                        function finish(_e, deltaFS) {
                           game_data = _game_data;
 
                           // Any file system writes to MountableFileSystem will be written to the
                           // deltaFS, letting us mount read-only zip files into the MountableFileSystem
                           // while being able to "write" to them.
-                          var MountableFS = BrowserFS.FileSystem.MountableFileSystem,
-                              OverlayFS = BrowserFS.FileSystem.OverlayFS,
-                              ZipFS = BrowserFS.FileSystem.ZipFS,
-                              Buffer = BrowserFS.BFSRequire('buffer').Buffer;
-                          MountableFS.Create(function (e, mountable) {
+                          const MountableFS = BrowserFS.FileSystem.MountableFileSystem;
+                          const OverlayFS = BrowserFS.FileSystem.OverlayFS;
+                          const ZipFS = BrowserFS.FileSystem.ZipFS;
+                          const Buffer = BrowserFS.BFSRequire('buffer').Buffer;
+                          MountableFS.Create(function (_e, mountable) {
                             OverlayFS.Create({ readable: mountable
                                              , writable: deltaFS
                                              },
@@ -1933,8 +1933,8 @@ globalThis.Module = null;
                                                } else {
                                                  game_data.fs = fs;
                                                  function fetch(file) {
-                                                   var isCached = 'cached' in file && file.cached,
-                                                       hasData = 'data' in file && file.data !== null && typeof file.data !== 'undefined';
+                                                   const isCached = 'cached' in file && file.cached;
+                                                   const hasData = 'data' in file && file.data !== null && typeof file.data !== 'undefined';
                                                    if (isCached || hasData) {
                                                      return cached_file(file.title, file.data);
                                                    } else {
@@ -1945,7 +1945,7 @@ globalThis.Module = null;
                                                    return function (data) {
                                                      if (data !== null) {
                                                        drive = drive.toLowerCase();
-                                                       var mountpoint = '/'+ drive;
+                                                       const mountpoint = '/'+ drive;
                                                        // Mount into RO MFS.
                                                        return new Promise(function (resolve, reject) {
                                                          return new ZipFS.Create({ zipData: new Buffer(data) },
@@ -1968,9 +1968,9 @@ globalThis.Module = null;
                                                          return;
                                                        }
                                                        if (filename.includes('/', 1)) {
-                                                         var parts = filename.substring(1).split('/');
-                                                         for (var i = 1; i < parts.length; i++) {
-                                                           var path = '/'+ parts.slice(0, i).join('/');
+                                                         const parts = filename.substring(1).split('/');
+                                                         for (let i = 1; i < parts.length; i++) {
+                                                           const path = '/'+ parts.slice(0, i).join('/');
                                                            if (!deltaFS.existsSync(path)) {
                                                              deltaFS.mkdirSync(path, 0o777);
                                                            }
@@ -1980,13 +1980,13 @@ globalThis.Module = null;
                                                      }
                                                    };
                                                  }
-                                                 var promises = game_data.files
+                                                 const promises = game_data.files
                                                                          .map(function (f) {
                                                                                 if (f && f.file) {
                                                                                   if (f.drive) {
                                                                                     return fetch(f.file).then(mountat(f.drive));
                                                                                   } else if (f.mountpoint) {
-                                                                                    var path = f.mountpoint[0] != '/' ? '/'+ f.mountpoint : f.mountpoint;
+                                                                                    const path = f.mountpoint[0] != '/' ? '/'+ f.mountpoint : f.mountpoint;
                                                                                     f.file.cached = deltaFS.existsSync(path);
                                                                                     return fetch(f.file).then(saveat(path));
                                                                                   }
@@ -2004,12 +2004,12 @@ globalThis.Module = null;
                         }
                       });
                     })
-              .then(function (game_files) {
+              .then(function () {
                       if (!game_data || splash.failed_loading) {
                         return null;
                       }
                       if (options.waitAfterDownloading) {
-                        return new Promise(function (resolve, reject) {
+                        return new Promise(function (resolve, _reject) {
                                              splash.setTitle("Press any key to continue...");
                                              splash.spinning = false;
 
