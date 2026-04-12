@@ -2142,31 +2142,23 @@ globalThis.Module = null;
          return size.toFixed(1) +' '+ units[exp];
      };
 
-     var fetch_file = function (title, url, rt, optional) {
-       return _fetch_file(title, url, rt, optional, false);
-     };
-
-     var cached_file = function (title, data) {
-       return _fetch_file(title, data, null, false, true);
-     };
-
-     var _fetch_file = function (title, url, rt, optional, cached) {
-       var needsCSS = splash.table.dataset.hasCustomCSS == "false";
-       var row = addRow(splash.table);
-       var titleCell = row[0], statusCell = row[1];
+     const _fetch_file = function (title, url, rt, optional, cached) {
+       const needsCSS = splash.table.dataset.hasCustomCSS == "false";
+       const row = addRow(splash.table);
+       const titleCell = row[0], statusCell = row[1];
        titleCell.textContent = title;
        return new Promise(function (resolve, reject) {
                             if (cached) {
                               success();
                               resolve(url); // second parameter reused as a pass–through
                             } else {
-                              var xhr = new XMLHttpRequest();
+                              const xhr = new XMLHttpRequest();
                               xhr.open('GET', url, true);
                               xhr.responseType = rt || 'arraybuffer';
                               xhr.onprogress = function (e) {
                                                  titleCell.innerHTML = title +" <span style=\"font-size: smaller\">"+ formatSize(e) +"</span>";
                                                };
-                              xhr.onload = function (e) {
+                              xhr.onload = function (_e) {
                                              if (xhr.status === 200) {
                                                success();
                                                resolve(xhr.response);
@@ -2178,7 +2170,7 @@ globalThis.Module = null;
                                                reject();
                                              }
                                            };
-                              xhr.onerror = function (e) {
+                              xhr.onerror = function (_e) {
                                               if (optional) {
                                                 success();
                                                 resolve(null);
@@ -2211,6 +2203,15 @@ globalThis.Module = null;
          }
        }
      };
+
+     const fetch_file = function (title, url, rt, optional) {
+       return _fetch_file(title, url, rt, optional, false);
+     };
+
+     const cached_file = function (title, data) {
+       return _fetch_file(title, data, null, false, true);
+     };
+
 
      function keyevent(resolve) {
        return function (e) {
