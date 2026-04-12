@@ -2474,7 +2474,7 @@ globalThis.Module = null;
     * Searches for dosbox.conf, and moves it to '/dosbox.conf' so dosbox uses it.
     */
    function moveConfigToRoot(fs) {
-     var dosboxConfPath = null;
+     let dosboxConfPath = null;
      // Recursively search for dosbox.conf.
      function searchDirectory(dirPath) {
        fs.readdirSync(dirPath).forEach(function(item) {
@@ -2488,8 +2488,8 @@ globalThis.Module = null;
          }
          // Append '/' between dirPath and the item's name... unless dirPath
          // already ends in it (which always occurs if dirPath is the root, '/').
-         var itemPath = dirPath + (dirPath[dirPath.length - 1] !== '/' ? "/" : "") + item,
-             itemStat = fs.statSync(itemPath);
+         const itemPath = dirPath + (dirPath[dirPath.length - 1] !== '/' ? "/" : "") + item;
+         const itemStat = fs.statSync(itemPath);
          if (itemStat.isDirectory(itemStat.mode)) {
            searchDirectory(itemPath);
          } else if (item === 'dosbox.conf') {
