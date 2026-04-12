@@ -2392,12 +2392,11 @@ globalThis.Module = null;
      };
 
      function setupFullScreen() {
-       var self = this;
-       var fullScreenChangeHandler = function() {
-                                       if (!(document.mozFullScreenElement || document.fullScreenElement)) {
-                                         resizeCanvas(canvas, scale, css_resolution, aspectRatio);
-                                       }
-                                     };
+       const fullScreenChangeHandler = function() {
+                                         if (!(document.mozFullScreenElement || document.fullScreenElement)) {
+                                           resizeCanvas(canvas, scale, css_resolution, aspectRatio);
+                                         }
+                                       };
        if ('onfullscreenchange' in document) {
          document.addEventListener('fullscreenchange', fullScreenChangeHandler);
        } else if ('onmozfullscreenchange' in document) {
