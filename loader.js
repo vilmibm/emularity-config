@@ -2451,24 +2451,24 @@ globalThis.Module = null;
 
    // This is such a hack. We're not calling the BrowserFS api
    // "correctly", so we have to synthesize these flags ourselves
-   var flag_r = { isReadable: function() { return true; },
-                  isWriteable: function() { return false; },
-                  isTruncating: function() { return false; },
-                  isAppendable: function() { return false; },
-                  isSynchronous: function() { return false; },
-                  isExclusive: function() { return false; },
-                  pathExistsAction: function() { return 0; },
-                  pathNotExistsAction: function() { return 1; }
-                };
-   var flag_w = { isReadable: function() { return false; },
-                  isWriteable: function() { return true; },
-                  isTruncating: function() { return false; },
-                  isAppendable: function() { return false; },
-                  isSynchronous: function() { return false; },
-                  isExclusive: function() { return false; },
-                  pathExistsAction: function() { return 0; },
-                  pathNotExistsAction: function() { return 3; }
-                };
+   const flag_r = { isReadable: function() { return true; },
+                    isWriteable: function() { return false; },
+                    isTruncating: function() { return false; },
+                    isAppendable: function() { return false; },
+                    isSynchronous: function() { return false; },
+                    isExclusive: function() { return false; },
+                    pathExistsAction: function() { return 0; },
+                    pathNotExistsAction: function() { return 1; }
+                  };
+   const flag_w = { isReadable: function() { return false; },
+                    isWriteable: function() { return true; },
+                    isTruncating: function() { return false; },
+                    isAppendable: function() { return false; },
+                    isSynchronous: function() { return false; },
+                    isExclusive: function() { return false; },
+                    pathExistsAction: function() { return 0; },
+                    pathNotExistsAction: function() { return 3; }
+                  };
 
    /**
     * Searches for dosbox.conf, and moves it to '/dosbox.conf' so dosbox uses it.
