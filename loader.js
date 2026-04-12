@@ -2317,17 +2317,17 @@ globalThis.Module = null;
                                     : defaultSplashColors[name];
      };
 
-     var addRow = function (table) {
-       var needsCSS = table.dataset.hasCustomCSS == "false";
-       var row = table.insertRow(-1);
+     const addRow = function (table) {
+       const needsCSS = table.dataset.hasCustomCSS == "false";
+       const row = table.insertRow(-1);
        if (needsCSS) {
          row.style.textAlign = 'center';
        }
-       var cell = row.insertCell(-1);
+       const cell = row.insertCell(-1);
        if (needsCSS) {
          cell.style.position = 'relative';
        }
-       var titleCell = document.createElement('span');
+       const titleCell = document.createElement('span');
        titleCell.classList.add("emularity-download-title");
        titleCell.textContent = '—';
        if (needsCSS) {
@@ -2336,7 +2336,7 @@ globalThis.Module = null;
          titleCell.style.whiteSpace = "nowrap";
        }
        cell.appendChild(titleCell);
-       var statusCell = document.createElement('span');
+       const statusCell = document.createElement('span');
        statusCell.classList.add("emularity-download-status");
        if (needsCSS) {
          statusCell.style.position = 'absolute';
@@ -2347,7 +2347,7 @@ globalThis.Module = null;
        return [titleCell, statusCell];
      };
 
-     var drawsplash = function () {
+     const drawsplash = function () {
        canvas.setAttribute('moz-opaque', '');
        if (!splash.splashimg.src) {
          splash.splashimg.src = "logo/emularity_color_small.png";
