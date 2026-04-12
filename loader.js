@@ -2221,7 +2221,7 @@ globalThis.Module = null;
               };
      };
 
-     var resizeCanvas = function (canvas, scale, resolution, aspectRatio) {
+     const resizeCanvas = function (canvas, scale, resolution, _aspectRatio) {
        if (scale && resolution) {
          // optimizeSpeed is the standardized value. different
          // browsers support different values; they will all ignore
