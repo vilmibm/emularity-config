@@ -1140,9 +1140,9 @@ globalThis.Module = null;
      return {"vga_memory_size": amount};
    };
 
-   var build_mame_arguments = function (muted, driver, native_resolution, sample_rate, peripheral, autoboot, extra_args, keepaspect, scale) {
+   const build_mame_arguments = function (_muted, driver, native_resolution, sample_rate, peripheral, autoboot, extra_args, keepaspect, scale) {
      scale = scale || 1;
-     var args = [driver,
+     let args = [driver,
                  '-verbose',
                  '-rompath', 'emulator',
                  '-window',
@@ -1165,7 +1165,7 @@ globalThis.Module = null;
      }
 
      if (peripheral) {
-       for (var p in peripheral) {
+       for (const p in peripheral) {
          if (Object.prototype.propertyIsEnumerable.call(peripheral, p)) {
            args.push('-' + p,
                      '/emulator/'+ (peripheral[p][0].replace(/\//g,'_')));
@@ -1176,11 +1176,10 @@ globalThis.Module = null;
      return args;
    };
 
-   var build_dosbox_arguments = function (emulator_start, files, extra_args) {
-     var args = ['-conf', '/emulator/dosbox.conf'];
+   const build_dosbox_arguments = function (emulator_start, files, extra_args) {
+     let args = ['-conf', '/emulator/dosbox.conf'];
 
-     var len = files.length;
-     for (var i = 0; i < len; i++) {
+     for (let i = 0; i < files.length; i++) {
        if ('drive' in files[i]) {
         //  See also https://www.dosbox.com/wiki/MOUNT
          if(files[i].drive_type==='hdd'){
@@ -1199,9 +1198,9 @@ globalThis.Module = null;
        args = args.concat(extra_args);
      }
 
-     var path = emulator_start.split(/\\|\//); // I have LTS already
+     const path = emulator_start.split(/\\|\//); // I have LTS already
      args.push('-c', /^[a-zA-Z]:$/.test(path[0]) ? path.shift() : 'c:');
-     var prog = path.pop();
+     const prog = path.pop();
      if (path && path.length)
        args.push('-c', 'cd '+ path.join('/'));
      args.push('-c', prog);
@@ -1209,8 +1208,8 @@ globalThis.Module = null;
      return args;
    };
 
-   var build_vice_arguments = function (emulator_start, files, fliplist, extra_args) {
-     var args = emulator_start ? ["-autostart", "/emulator/" + emulator_start] : [];
+   const build_vice_arguments = function (emulator_start, _files, fliplist, extra_args) {
+     let args = emulator_start ? ["-autostart", "/emulator/" + emulator_start] : [];
      if (fliplist[0] || fliplist[1] || fliplist[2] || fliplist[3]) {
        args = args.concat(["-flipname", "/emulator/metadata_fliplist.vfl"]);
      }
@@ -1220,8 +1219,8 @@ globalThis.Module = null;
      return args;
    };
 
-   var build_np2_arguments = function (emulator_start, files, extra_args) {
-     var args = emulator_start ? [emulator_start] : [];
+   const build_np2_arguments = function (emulator_start, _files, extra_args) {
+     let args = emulator_start ? [emulator_start] : [];
      if (extra_args) {
        args = args.concat(extra_args);
      }
