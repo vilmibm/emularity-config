@@ -1232,16 +1232,15 @@ globalThis.Module = null;
     * EmscriptenRunner
     */
    function EmscriptenRunner(canvas, game_data) {
-     var self = this;
      this._canvas = canvas;
      this._hooks = { start: [], reset: [] };
 
      // If passed in canvas is in a shadow root, Emscripten's later findEventTarget('#canvas')
      // won't find it via document queries — patch both to fall back to shadow root.
      if (canvas.getRootNode && canvas.getRootNode() !== document) {
-        var _root = canvas.getRootNode();
-        var _origGetById = document.getElementById.bind(document);
-        var _origQS = document.querySelector.bind(document);
+        const _root = canvas.getRootNode();
+        const _origGetById = document.getElementById.bind(document);
+        const _origQS = document.querySelector.bind(document);
         document.getElementById = function(id) {
           return _origGetById(id) || _root.querySelector('#' + id);
         };
@@ -1268,7 +1267,7 @@ globalThis.Module = null;
                 preInit: function () {
                            // Re-initialize BFS to just use the writable in-memory storage.
                            BrowserFS.initialize(game_data.fs);
-                           var BFS = new BrowserFS.EmscriptenFS();
+                           const BFS = new BrowserFS.EmscriptenFS();
                            // Mount the file system into Emscripten.
                            FS.mkdir('/emulator');
                            FS.mount(BFS, {root: '/'}, '/emulator');
@@ -1285,22 +1284,22 @@ globalThis.Module = null;
               };
    }
 
-   EmscriptenRunner.prototype.start = function () {
-   };
+   EmscriptenRunner.prototype.start = function () { };
 
-   EmscriptenRunner.prototype.pause = function () {
-   };
+   EmscriptenRunner.prototype.pause = function () { };
 
    EmscriptenRunner.prototype.stop = function () {
     if (this._restoreDocQueries) this._restoreDocQueries();
    };
 
-  var mute_protection = function() {
-    var func = Module._SDL_PauseAudio;
+  const mute_protection = function() {
+    let func = Module._SDL_PauseAudio;
     if (!func) {
       try {
         func = eval('_SDL_PauseAudio');
-      } catch (e) {}
+      } catch {
+        // will note error state if func ends up falsey
+      }
     }
     if (!func)
       throw Error('EmscriptenRunner cant un/mute'); // avoid abort()
