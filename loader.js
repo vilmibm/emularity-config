@@ -1604,15 +1604,15 @@ globalThis.Module = null;
     */
    function RuffleRunner(canvas, game_data) {
      if (!game_data.swf_file_name) {
-       let url = game_data.files[0].file.url;
+       const url = game_data.files[0].file.url;
        game_data.swf_file_name = url.slice(url.lastIndexOf('/'));
      }
      // read game data from file system
-     let gamedata = game_data.fs.readFileSync(game_data.swf_file_name, null, flag_r);
+     const gamedata = game_data.fs.readFileSync(game_data.swf_file_name, null, flag_r);
      this.ready = null;
 
-     let ruffle = RufflePlayer.newest();
-     let player = ruffle.createPlayer();
+     const ruffle = RufflePlayer.newest();
+     const player = ruffle.createPlayer();
      player.addEventListener('loadedmetadata', () => {
        player.style.width = player.metadata.width + "px";
        player.style.height = player.metadata.height + "px";
@@ -1620,7 +1620,7 @@ globalThis.Module = null;
      this._player = player;
 
      // copy atributes of canvas to player div
-     for (let el of canvas.attributes){
+     for (const el of canvas.attributes){
        player.setAttribute(el.localName, el.nodeValue);
      }
 
@@ -1638,11 +1638,9 @@ globalThis.Module = null;
      this._player.enterFullscreen();
    };
 
-   RuffleRunner.prototype.onReset =  function (func) {
-   };
+   RuffleRunner.prototype.onReset =  function (_func) { };
 
-   RuffleRunner.prototype.start =  function (func) {
-   };
+   RuffleRunner.prototype.start =  function (_func) { };
 
    RuffleRunner.prototype.onStarted =  function (func) {
      this.ready = func;
