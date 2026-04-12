@@ -1678,36 +1678,34 @@ globalThis.Module = null;
      this._canvas = canvas;
    }
 
-   CloudpilotRunner.prototype.onReset =  function (func) {
-   };
+   CloudpilotRunner.prototype.onReset = function (_func) { };
 
-   CloudpilotRunner.prototype.start =  function (func) {
-     var runner = this;
+   CloudpilotRunner.prototype.start = function (_func) {
      cloudpilot.createEmulator()
-               .then(function(emulator) {
+               .then((emulator) => {
                        emulator
-                         .setCanvas(runner._canvas)
-                         .bindInput(runner._canvas, runner._canvas);
+                         .setCanvas(this._canvas)
+                         .bindInput(this._canvas, this._canvas);
 
-                         if (runner._sessionFile && runner._prcFile) {
+                         if (this._sessionFile && this._prcFile) {
                            // Load booted image and install app.
                            emulator
-                             .loadSession(runner._sessionFile)
-                             .installAndLaunchDatabase(runner._prcFile);
-                         } else if (runner._sessionFile && runner._prcZip) {
+                             .loadSession(this._sessionFile)
+                             .installAndLaunchDatabase(this._prcFile);
+                         } else if (this._sessionFile && this._prcZip) {
                            // Load booted image and install app.
                            emulator
-                             .loadSession(runner._sessionFile)
-                             .installFromZipfileAndLaunch(runner._prcZip, runner._prcFileName);
-                         } else if (runner._biosFile) {
+                             .loadSession(this._sessionFile)
+                             .installFromZipfileAndLaunch(this._prcZip, this._prcFileName);
+                         } else if (this._biosFile) {
                            // Missing app .prc; load initial BIOS directly (Palm setup process).
-                           emulator.loadRom(runner._biosFile);
+                           emulator.loadRom(this._biosFile);
                          }
                        emulator.resume();
-                       runner._canvas.tabIndex = 0;
-                       runner._canvas.style.outline = 0;
-                       runner._canvas.focus();
-                       runner._emulator = emulator;
+                       this._canvas.tabIndex = 0;
+                       this._canvas.style.outline = 0;
+                       this._canvas.focus();
+                       this._emulator = emulator;
                     });
    };
 
