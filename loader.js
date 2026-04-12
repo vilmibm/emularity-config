@@ -2241,8 +2241,10 @@ globalThis.Module = null;
        }
      };
 
-     var clearCanvas = function () {
-       var context = canvas.getContext('2d');
+     // TODO this is unused in this file but I see it used in some code in
+     // emularity-engine; further study required
+     const clearCanvas = function () {
+       const context = canvas.getContext('2d');
        context.fillStyle = splash.getColor('background');
        context.fillRect(0, 0, canvas.width, canvas.height);
        console.log("canvas cleared");
