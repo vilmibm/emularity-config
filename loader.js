@@ -1923,83 +1923,86 @@ globalThis.Module = null;
                           const ZipFS = BrowserFS.FileSystem.ZipFS;
                           const Buffer = BrowserFS.BFSRequire('buffer').Buffer;
                           MountableFS.Create(function (_e, mountable) {
-                            OverlayFS.Create({ readable: mountable
-                                             , writable: deltaFS
-                                             },
-                                             function (e, fs) {
-                                               if (e) {
-                                                 console.error("Failed to initialize the OverlayFS:", e);
-                                                 reject();
-                                               } else {
-                                                 game_data.fs = fs;
-                                                 function fetch(file) {
-                                                   const isCached = 'cached' in file && file.cached;
-                                                   const hasData = 'data' in file && file.data !== null && typeof file.data !== 'undefined';
-                                                   if (isCached || hasData) {
-                                                     return cached_file(file.title, file.data);
-                                                   } else {
-                                                     return fetch_file(file.title, file.url, 'arraybuffer', file.optional);
-                                                   }
-                                                 }
-                                                 function mountat(drive) {
-                                                   return function (data) {
-                                                     if (data !== null) {
-                                                       drive = drive.toLowerCase();
-                                                       const mountpoint = '/'+ drive;
-                                                       // Mount into RO MFS.
-                                                       return new Promise(function (resolve, reject) {
-                                                         return new ZipFS.Create({ zipData: new Buffer(data) },
-                                                                                 function (e, fs) {
-                                                                                   if (e) {
-                                                                                     reject();
-                                                                                   } else {
-                                                                                     mountable.mount(mountpoint, fs);
-                                                                                     resolve();
-                                                                                   }
-                                                                                 });
-                                                       });
-                                                     }
-                                                   };
-                                                 }
-                                                 function saveat(filename) {
-                                                   return function (data) {
-                                                     if (data !== null) {
-                                                       if (deltaFS.existsSync(filename)) {
-                                                         return;
-                                                       }
-                                                       if (filename.includes('/', 1)) {
-                                                         const parts = filename.substring(1).split('/');
-                                                         for (let i = 1; i < parts.length; i++) {
-                                                           const path = '/'+ parts.slice(0, i).join('/');
-                                                           if (!deltaFS.existsSync(path)) {
-                                                             deltaFS.mkdirSync(path, 0o777);
-                                                           }
-                                                         }
-                                                       }
-                                                       deltaFS.writeFileSync(filename, new Buffer(data), null, flag_w, 0o644);
-                                                     }
-                                                   };
-                                                 }
-                                                 const promises = game_data.files
-                                                                         .map(function (f) {
-                                                                                if (f && f.file) {
-                                                                                  if (f.drive) {
-                                                                                    return fetch(f.file).then(mountat(f.drive));
-                                                                                  } else if (f.mountpoint) {
-                                                                                    const path = f.mountpoint[0] != '/' ? '/'+ f.mountpoint : f.mountpoint;
-                                                                                    f.file.cached = deltaFS.existsSync(path);
-                                                                                    return fetch(f.file).then(saveat(path));
-                                                                                  }
-                                                                                }
-                                                                                return null;
-                                                                              });
-                                                 // this is kinda wrong; it really only applies when we're loading something created by Emscripten
-                                                 if ('emulatorWASM' in game_data && game_data.emulatorWASM && 'WebAssembly' in globalThis) {
-                                                   promises.push(fetch({ title: "WASM Binary", url: game_data.emulatorWASM }).then(function (data) { game_data.wasmBinary = data; }));
-                                                 }
-                                                 Promise.all(promises).then(resolve, reject);
-                                               }
-                                             });
+                            OverlayFS.Create(
+                              { readable: mountable, writable: deltaFS },
+                              function (e, fs) {
+                                if (e) {
+                                  console.error("Failed to initialize the OverlayFS:", e);
+                                  reject();
+                                  return;
+                                }
+                                game_data.fs = fs;
+                                const fetch = function(file) {
+                                  const isCached = 'cached' in file && file.cached;
+                                  const hasData = 'data' in file && file.data !== null && typeof file.data !== 'undefined';
+                                  if (isCached || hasData) {
+                                    return cached_file(file.title, file.data);
+                                  } else {
+                                    return fetch_file(file.title, file.url, 'arraybuffer', file.optional);
+                                  }
+                                };
+                                const mountat = function (drive) {
+                                  return function (data) {
+                                    if (data !== null) {
+                                      drive = drive.toLowerCase();
+                                      const mountpoint = '/'+ drive;
+                                      // Mount into RO MFS.
+                                      return new Promise(function (resolve, reject) {
+                                        return new ZipFS.Create(
+                                          { zipData: new Buffer(data) },
+                                          function (e, fs) {
+                                            if (e) {
+                                              reject();
+                                              return;
+                                            }
+                                            mountable.mount(mountpoint, fs);
+                                            resolve();
+                                          });
+                                      });
+                                    }
+                                  };
+                                };
+                                const saveat = function(filename) {
+                                  return function (data) {
+                                    if (data !== null) {
+                                      if (deltaFS.existsSync(filename)) {
+                                        return;
+                                      }
+                                      if (filename.includes('/', 1)) {
+                                        const parts = filename.substring(1).split('/');
+                                        for (let i = 1; i < parts.length; i++) {
+                                          const path = '/'+ parts.slice(0, i).join('/');
+                                          if (!deltaFS.existsSync(path)) {
+                                            deltaFS.mkdirSync(path, 0o777);
+                                          }
+                                        }
+                                      }
+                                      deltaFS.writeFileSync(filename, new Buffer(data), null, flag_w, 0o644);
+                                    }
+                                  };
+                                };
+                                const promises = game_data.files.map(
+                                  function (f) {
+                                    if (f && f.file) {
+                                      if (f.drive) {
+                                        return fetch(f.file).then(mountat(f.drive));
+                                      } else if (f.mountpoint) {
+                                        const path = f.mountpoint[0] != '/' ? '/'+ f.mountpoint : f.mountpoint;
+                                        f.file.cached = deltaFS.existsSync(path);
+                                        return fetch(f.file).then(saveat(path));
+                                      }
+                                    }
+                                    return null;
+                                });
+                                // this is kinda wrong; it really only applies when we're loading something created by Emscripten
+                                if ('emulatorWASM' in game_data && game_data.emulatorWASM && 'WebAssembly' in globalThis) {
+                                  promises.push(
+                                    fetch(
+                                      { title: "WASM Binary", url: game_data.emulatorWASM }).then(
+                                        function (data) { game_data.wasmBinary = data; }));
+                                 }
+                                 Promise.all(promises).then(resolve, reject);
+                              });
                           });
                         }
                       });
