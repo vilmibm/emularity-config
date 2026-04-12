@@ -1505,19 +1505,19 @@ globalThis.Module = null;
     */
    function V86Runner(canvas, game_data) {
      // v86 needs a specific DOM structure instead of a canvas
-     var screenContainerOuterElt = document.createElement("div");
+     const screenContainerOuterElt = document.createElement("div");
      screenContainerOuterElt.id = canvas.id;
      screenContainerOuterElt.classList = canvas.classList;
      screenContainerOuterElt.style = canvas.style;
 
-     var screenContainerInnerElt = document.createElement("div");
+     const screenContainerInnerElt = document.createElement("div");
      screenContainerInnerElt.classList = ["emularity-v86-screen-container"];
      screenContainerInnerElt.style = "display:flex;justify-content:center;align-items:center;background-color:#000;";
 
-     var textDivElt = document.createElement("div");
+     const textDivElt = document.createElement("div");
      textDivElt.classList = ["emularity-v86-screen-text"];
      textDivElt.style = "font-size:14px;font-family:monospace;line-height:14px;white-space:pre;";
-     var canvasElt = document.createElement("canvas");
+     const canvasElt = document.createElement("canvas");
      canvasElt.classList = ["emularity-v86-screen-canvas"];
      canvasElt.style = "display:none;";
 
@@ -1526,7 +1526,7 @@ globalThis.Module = null;
      screenContainerOuterElt.appendChild(screenContainerInnerElt);
      canvas.parentNode.replaceChild(screenContainerOuterElt, canvas);
 
-     var cfg = {};
+     const cfg = {};
      cfg.screen_container = screenContainerInnerElt;
      cfg.memory_size = Math.floor(game_data.memory_size * 1024 * 1024);
      cfg.vga_memory_size = Math.floor(game_data.vga_memory_size * 1024 * 1024);
@@ -1549,7 +1549,7 @@ globalThis.Module = null;
        }
      });
 
-     var emu = new V86Starter(cfg);
+     const emu = new V86Starter(cfg);
      this._emulator = emu;
      this.ready = null;
 
@@ -1557,10 +1557,7 @@ globalThis.Module = null;
        emu.screen_set_scale(game_data["scale"], game_data["scale"]);
      }
 
-     screenContainerInnerElt.addEventListener('click',
-                                              function (e) {
-                                                emu.lock_mouse();
-                                              });
+     screenContainerInnerElt.addEventListener('click', () => { emu.lock_mouse() });
    }
 
    V86Runner.prototype.start = function () {
@@ -1593,9 +1590,7 @@ globalThis.Module = null;
      this._emulator.add_listener("emulator-started", func);
    };
 
-   V86Runner.prototype.onReset = function (func) {
-     // not supported
-   };
+   V86Runner.prototype.onReset = function (_func) { };
 
    V86Runner.prototype.requestFullScreen = function () {
      getfullscreenenabler().call(this._canvas);
