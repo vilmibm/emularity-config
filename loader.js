@@ -1366,7 +1366,7 @@ globalThis.Module = null;
    NP2Runner.prototype = Object.create(EmscriptenRunner.prototype);
    NP2Runner.prototype.start = function () {
      try {
-       var configFile = FS.readFile('/emulator/np2.cfg');
+       const configFile = FS.readFile('/emulator/np2.cfg');
        FS.writeFile('/emulator/np2/np2.cfg', configFile);
      } catch (ex) {
        //If the user config file not found, NP2 will use default settings
