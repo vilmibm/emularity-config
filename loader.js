@@ -762,15 +762,6 @@ globalThis.Module = null;
        return get_cors_url('emularity-bios', bios_filename);
      };
 
-     function mountat (drive) {
-       return function (data) {
-         return { drive: drive,
-                  mountpoint: "/" + drive,
-                  data: data
-                };
-       };
-     }
-
      return emulator;
    }
 
