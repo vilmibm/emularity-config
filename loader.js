@@ -387,6 +387,10 @@ globalThis.Module = null;
        return files;
      }
 
+     const get_bios_url = function (bios_filename) {
+       return get_cors_url('emularity-bios', bios_filename);
+     };
+
      function get_mame_files(cfgr, metadata, modulecfg, filelist) {
        var files = [],
            bios_files = modulecfg['bios_filenames'];
@@ -756,10 +760,6 @@ globalThis.Module = null;
 
      var get_js_url = function (js_filename) {
        return get_cors_url('emularity-engine', js_filename);
-     };
-
-     var get_bios_url = function (bios_filename) {
-       return get_cors_url('emularity-bios', bios_filename);
      };
 
      return emulator;
