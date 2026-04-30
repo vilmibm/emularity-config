@@ -637,24 +637,23 @@ globalThis.Module = null;
      }
 
      function get_cloudpilot_files(cfgr, metadata, modulecfg, filelist) {
-       var files = [];
-       var bios_files = modulecfg['bios_filenames'];
+       const files = [];
+       const bios_files = modulecfg['bios_filenames'];
        bios_files.forEach(function (fname, i) {
-                            if (fname) {
-                              var title = "Bios File ("+ (i+1) +" of "+ bios_files.length +")";
-                              files.push(cfgr.mountFile('/'+ fname,
-                                                        cfgr.fetchFile(title,
-                                                                       get_bios_url(fname))));
-                            }
-                          });
-       var meta = dict_from_xml(metadata);
-       var game_files = files_with_ext_from_filelist(filelist, meta.emulator_ext);
-       var len = game_files.length;
+         if (fname) {
+           const title = "Bios File ("+ (i+1) +" of "+ bios_files.length +")";
+           files.push(cfgr.mountFile('/'+ fname,
+                                     cfgr.fetchFile(title,
+                                                    get_bios_url(fname))));
+         }
+       });
+       const meta = dict_from_xml(metadata);
+       const game_files = files_with_ext_from_filelist(filelist, meta.emulator_ext);
        if (game_files.length > 0) {
-         var file = game_files[0]; // only allow one .swf file to be loaded
-         var title = 'Downloading Game File';
-         var url = (file.name.includes('/')) ? get_zip_url(file.name)
-                                             : get_zip_url(file.name, get_item_name(game));
+         const file = game_files[0]; // only allow one .swf file to be loaded
+         const title = 'Downloading Game File';
+         const url = (file.name.includes('/')) ? get_zip_url(file.name)
+                                               : get_zip_url(file.name, get_item_name(game));
          files.push(cfgr.mountFile('/' + file.name, cfgr.fetchFile(title, url)));
          files.push(cfgr.prc(file.name));
        }
