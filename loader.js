@@ -584,7 +584,7 @@ globalThis.Module = null;
        });
        const meta = dict_from_xml(metadata);
        const game_files_counter = {};
-       files_with_ext_from_filelist(filelist, meta.emulator_ext).forEach(function (file, _i) {
+       files_with_ext_from_filelist(filelist, meta.emulator_ext).forEach(function (file) {
          game_files_counter[file.name] = 1;
        });
 
