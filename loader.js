@@ -662,44 +662,48 @@ globalThis.Module = null;
     }
 
      function get_v86_files(cfgr, metadata, modulecfg, filelist) {
-       var files = [];
+       const files = [];
 
        if (modulecfg['bios_filename']) {
-         files.push(cfgr.mountFile('/' + modulecfg['bios_filename'], cfgr.fetchFile("BIOS File", get_bios_url(modulecfg['bios_filename']))));
+         files.push(
+           cfgr.mountFile('/' + modulecfg['bios_filename'],
+             cfgr.fetchFile("BIOS File", get_bios_url(modulecfg['bios_filename']))));
          files.push(cfgr.bios(modulecfg['bios_filename']));
        }
+
        if (modulecfg['vga_bios_filename']) {
-         files.push(cfgr.mountFile('/' + modulecfg['vga_bios_filename'], cfgr.fetchFile("VGA BIOS File", get_bios_url(modulecfg['vga_bios_filename']))));
+         files.push(
+           cfgr.mountFile('/' + modulecfg['vga_bios_filename'],
+            cfgr.fetchFile("VGA BIOS File", get_bios_url(modulecfg['vga_bios_filename']))));
          files.push(cfgr.vgaBios(modulecfg['vga_bios_filename']));
        }
 
-       var meta = dict_from_xml(metadata),
-           game_files_counter = {};
+       const meta = dict_from_xml(metadata);
+       const game_files_counter = {};
        files_with_ext_from_filelist(filelist, meta.emulator_ext).forEach(function (file, i) {
-                                                                           if (modulecfg.peripherals && modulecfg.peripherals[i]) {
-                                                                             game_files_counter[file.name] = modulecfg.peripherals[i];
-                                                                           }
-                                                                         });
+         if (modulecfg.peripherals && modulecfg.peripherals[i]) {
+           game_files_counter[file.name] = modulecfg.peripherals[i];
+         }
+       });
        meta_props_matching(meta, /^v86_drive_([a-zA-Z0-9]+)$/).forEach(function (result) {
-                                                                         var key = result[0], periph = result[1][1];
-                                                                         game_files_counter[meta[key]] = periph;
-                                                                       });
+         const key = result[0], periph = result[1][1];
+         game_files_counter[meta[key]] = periph;
+       });
 
-       var game_files = Object.keys(game_files_counter),
-           len = game_files.length;
+       const game_files = Object.keys(game_files_counter);
+       const len = game_files.length;
        game_files.forEach(function (filename, i) {
-                            var title = "Game File ("+ (i+1) +" of "+ len +")",
-                                ext = filename.match(/\.([^.]*)$/)[1],
-                                url = (filename.includes("/")) ? get_zip_url(filename)
-                                                               : get_zip_url(filename, get_item_name(game)),
-                                periph = game_files_counter[filename],
-                                path = '/' + periph + '.' + ext,
-                                periph_cfg = {};
-                            periph_cfg[periph] = {"path": path};
-                            files.push(cfgr.mountFile(path,
-                                                      cfgr.fetchFile(title, url)));
-                            files.push(periph_cfg);
-                          });
+         const title = "Game File ("+ (i+1) +" of "+ len +")";
+         const ext = filename.match(/\.([^.]*)$/)[1];
+         const url = (filename.includes("/")) ? get_zip_url(filename)
+                                              : get_zip_url(filename, get_item_name(game));
+         const periph = game_files_counter[filename];
+         const path = '/' + periph + '.' + ext;
+         const periph_cfg = {};
+         periph_cfg[periph] = {"path": path};
+         files.push(cfgr.mountFile(path, cfgr.fetchFile(title, url)));
+         files.push(periph_cfg);
+       });
 
       return files;
      }
