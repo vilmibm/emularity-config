@@ -606,33 +606,30 @@ globalThis.Module = null;
      }
 
      function get_vmac_files(cfgr, metadata, modulecfg, filelist) {
-       var files = [],
-           bios_files = modulecfg['bios_filenames'];
+       const files = [];
+       const bios_files = modulecfg['bios_filenames'];
        bios_files.forEach(function (fname, i) {
-                            if (fname) {
-                              var title = "ROM File ("+ (i+1) +" of "+ bios_files.length +")",
-                                  mounter = (fname.endsWith(".zip")) ? cfgr.mountZip
-                                                                     : cfgr.mountFile;
-                              files.push(mounter('minivmac',
-                                                 cfgr.fetchFile(title, get_bios_url(fname))));
-                            }
-                          });
-       var meta = dict_from_xml(metadata),
-           peripherals = {},
-           game_files_counter = {};
-       files_with_ext_from_filelist(filelist, meta.emulator_ext).forEach(function (file, i) {
-                                                                           game_files_counter[file.name] = 1;
-                                                                         });
+         if (fname) {
+           const title = "ROM File ("+ (i+1) +" of "+ bios_files.length +")";
+           const mounter = (fname.endsWith(".zip")) ? cfgr.mountZip : cfgr.mountFile;
+           files.push(mounter('minivmac', cfgr.fetchFile(title, get_bios_url(fname))));
+         }
+       });
+       const meta = dict_from_xml(metadata);
+       const game_files_counter = {};
+       files_with_ext_from_filelist(filelist, meta.emulator_ext).forEach(function (file, _) {
+         game_files_counter[file.name] = 1;
+       });
 
-       var game_files = Object.keys(game_files_counter),
-           len = game_files.length;
+       const game_files = Object.keys(game_files_counter);
+       const len = game_files.length;
        game_files.forEach(function (filename, i) {
-                            var title = "Game File ("+ (i+1) +" of "+ len +")",
-                                url = (filename.includes("/")) ? get_zip_url(filename)
-                                                               : get_zip_url(filename, get_item_name(game));
-                            files.push(cfgr.mountFile('/'+ filename,
-                                                      cfgr.fetchFile(title, url)));
-                          });
+         const title = "Game File ("+ (i+1) +" of "+ len +")";
+         const url = (filename.includes("/")) ? get_zip_url(filename)
+                                              : get_zip_url(filename, get_item_name(game));
+         files.push(cfgr.mountFile('/'+ filename, cfgr.fetchFile(title, url)));
+       });
+
        return files;
      }
 
