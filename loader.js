@@ -704,13 +704,13 @@ globalThis.Module = null;
       return files;
      }
 
-     var get_item_name = function (game_path) {
+     const get_item_name = function (game_path) {
        return game_path.split('/').shift();
      };
 
      // NOTE: deliberately use cors.archive.org since this will 302 rewrite to iaXXXXX.us.archive.org/XX/items/...
      // and need to keep that "artificial" extra domain-ish name to avoid CORS issues with IE/Safari  (tracey@archive)
-     var get_cors_url = function(item, path) {
+     const get_cors_url = function(item, path) {
        if (item === 'emularity-engine' || item === 'emularity-config' || item === 'emularity-bios') {
         // If http origin is null (the string 'null'!), assume onion.
         // See https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Origin#null
@@ -720,8 +720,8 @@ globalThis.Module = null;
         } else {
           // allow optional testing CGI arg to hit the review app test cluster
           // (helpful for testing out pre-production code & files)
-          var prefix = location.search.indexOf('?devao=1') < 0 ? '' : 'internetarchive-';
-          var domain = location.search.indexOf('?devao=1') < 0 ? 'ux-b.archive.org' : 'dev.archive.org';
+          const prefix = location.search.indexOf('?devao=1') < 0 ? '' : 'internetarchive-';
+          const domain = location.search.indexOf('?devao=1') < 0 ? 'ux-b.archive.org' : 'dev.archive.org';
           return '//' + prefix + item + '.' + domain + (path ? '/' + path : '');
          }
        }
@@ -729,32 +729,32 @@ globalThis.Module = null;
        return '//cors.archive.org/cors/' + item + (path ? '/' + path : '');
      }
 
-     var get_emulator_config_url = function (module) {
+     const get_emulator_config_url = function (module) {
        return get_cors_url('emularity-engine', module + '.json');
      };
 
-     var get_other_emulator_config_url = function (module) {
+     const get_other_emulator_config_url = function (module) {
        return get_cors_url('emularity-config', module + '.cfg');
      };
 
-     var get_meta_url = function (game_path) {
-       var path = game_path.split('/');
+     const get_meta_url = function (game_path) {
+       const path = game_path.split('/');
        return get_cors_url(path[0], path[0] + "_meta.xml");
      };
 
-     var get_files_url = function (game_path) {
-       var path = game_path.split('/');
+     const get_files_url = function (game_path) {
+       const path = game_path.split('/');
        return get_cors_url(path[0], path[0] +"_files.xml");
      };
 
-     var get_zip_url = function (game_path, item_path) {
+     const get_zip_url = function (game_path, item_path) {
        if (item_path) {
          return get_cors_url(item_path, game_path);
        }
        return get_cors_url(game_path);
      };
 
-     var get_js_url = function (js_filename) {
+     const get_js_url = function (js_filename) {
        return get_cors_url('emularity-engine', js_filename);
      };
 
