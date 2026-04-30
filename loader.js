@@ -708,10 +708,6 @@ globalThis.Module = null;
        return game_path.split('/').shift();
      };
 
-     var get_game_name = function (game_path) {
-       return game_path.split('/').pop();
-     };
-
      // NOTE: deliberately use cors.archive.org since this will 302 rewrite to iaXXXXX.us.archive.org/XX/items/...
      // and need to keep that "artificial" extra domain-ish name to avoid CORS issues with IE/Safari  (tracey@archive)
      var get_cors_url = function(item, path) {
