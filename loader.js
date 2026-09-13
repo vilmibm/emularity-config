@@ -452,30 +452,27 @@ globalThis.Module = null;
      }
 
      function get_sae_files(cfgr, metadata, modulecfg, filelist) {
-       var files = [],
-           bios_files = modulecfg['bios_filenames'];
+       const files = [];
+       const bios_files = modulecfg['bios_filenames'];
        bios_files.forEach(function (fname, i) {
-                            if (fname) {
-                              var title = "Bios File ("+ (i+1) +" of "+ bios_files.length +")";
-                              files.push(cfgr.mountFile('/'+ fname,
-                                                        cfgr.fetchFile(title,
-                                                                       get_bios_url(fname))));
-                            }
-                          });
+         if (fname) {
+           const title = "Bios File ("+ (i+1) +" of "+ bios_files.length +")";
+           files.push(cfgr.mountFile('/'+ fname, cfgr.fetchFile(title, get_bios_url(fname))));
+         }
+       });
 
-       var meta = dict_from_xml(metadata),
-           game_files = files_with_ext_from_filelist(filelist, meta.emulator_ext);
+       const meta = dict_from_xml(metadata);
+       const game_files = files_with_ext_from_filelist(filelist, meta.emulator_ext);
        game_files.forEach(function (file, i) {
-                            if (file) {
-                              var title = "Game File ("+ (i+1) +" of "+ game_files.length +")",
-                                  url = (file.name.includes("/")) ? get_zip_url(file.name)
-                                                                  : get_zip_url(file.name, get_item_name(game));
-                              files.push(cfgr.mountFile('/'+ file.name,
-                                                        cfgr.fetchFile(title, url)));
-                              files.push(cfgr.floppy(0,             // we're not pushing a file here
-                                                     file.name));   // but that's ok
-                            }
-                          });
+         if (file) {
+           const title = "Game File ("+ (i+1) +" of "+ game_files.length +")";
+           const url = (file.name.includes("/")) ? get_zip_url(file.name)
+                                                 : get_zip_url(file.name, get_item_name(game));
+           files.push(cfgr.mountFile('/'+ file.name, cfgr.fetchFile(title, url)));
+           // we're not pushing a file here but that's ok
+           files.push(cfgr.floppy(0, file.name));
+         }
+       });
        files.push(cfgr.mountFile('/'+ modulecfg['driver'] + '.cfg',
                                  cfgr.fetchOptionalFile("Config File",
                                                         get_other_emulator_config_url(module))));
