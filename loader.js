@@ -501,43 +501,45 @@ globalThis.Module = null;
     }
 
      function get_pce_files(cfgr, metadata, modulecfg, filelist) {
-       var files = [],
-           bios_files = modulecfg['bios_filenames'];
+       const files = [];
+       const bios_files = modulecfg['bios_filenames'];
        bios_files.forEach(function (fname, i) {
-                            if (fname) {
-                              var title = "ROM File ("+ (i+1) +" of "+ bios_files.length +")";
-                              files.push(cfgr.mountFile('/'+ fname,
-                                                        cfgr.fetchFile(title,
-                                                                       get_bios_url(fname))));
-                            }
-                          });
+         if (fname) {
+           const title = "ROM File ("+ (i+1) +" of "+ bios_files.length +")";
+           files.push(cfgr.mountFile('/'+ fname, cfgr.fetchFile(title, get_bios_url(fname))));
+         }
+       });
 
-       var meta = dict_from_xml(metadata),
-           game_files_counter = {};
+       const meta = dict_from_xml(metadata);
+       const game_files_counter = {};
        files_with_ext_from_filelist(filelist, meta.emulator_ext).forEach(function (file, i) {
-                                                                           if (modulecfg.peripherals && modulecfg.peripherals[i]) {
-                                                                             game_files_counter[file.name] = modulecfg.peripherals[i];
-                                                                           }
-                                                                         });
+           if (modulecfg.peripherals && modulecfg.peripherals[i]) {
+             game_files_counter[file.name] = modulecfg.peripherals[i];
+           }
+         });
+
        meta_props_matching(meta, /^pce_drive_([a-zA-Z0-9]+)$/).forEach(function (result) {
-                                                                         var key = result[0], periph = result[1][1];
-                                                                         game_files_counter[meta[key]] = periph;
-                                                                       });
+         const key = result[0], periph = result[1][1];
+         game_files_counter[meta[key]] = periph;
+       });
 
-       var game_files = Object.keys(game_files_counter),
-           len = game_files.length;
+       const game_files = Object.keys(game_files_counter);
+       const len = game_files.length;
        game_files.forEach(function (filename, i) {
-                            var title = "Game File ("+ (i+1) +" of "+ len +")",
-                                ext = filename.match(/\.([^.]*)$/)[1],
-                                url = (filename.includes("/")) ? get_zip_url(filename)
-                                                               : get_zip_url(filename, get_item_name(game));
-                            files.push(cfgr.mountFile('/'+ game_files_counter[filename] +'.'+ ext,
-                                                      cfgr.fetchFile(title, url)));
-                          });
+         const title = "Game File ("+ (i+1) +" of "+ len +")";
+         const ext = filename.match(/\.([^.]*)$/)[1];
+         const url = (filename.includes("/")) ? get_zip_url(filename)
+                                              : get_zip_url(
+                                                  filename, get_item_name(game));
+         files.push(
+           cfgr.mountFile('/'+ game_files_counter[filename] +'.'+ ext,
+                          cfgr.fetchFile(title, url)));
+       });
 
-       files.push(cfgr.mountFile('/pce-'+ modulecfg['driver'] + '.cfg',
-                                 cfgr.fetchOptionalFile("Config File",
-                                                        get_other_emulator_config_url("pce-"+ modulecfg['driver']))));
+       files.push(
+         cfgr.mountFile('/pce-'+ modulecfg['driver'] + '.cfg',
+                        cfgr.fetchOptionalFile('Config File',
+                                               get_other_emulator_config_url('pce-'+ modulecfg['driver']))));
        return files;
      }
 
