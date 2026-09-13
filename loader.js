@@ -392,58 +392,54 @@ globalThis.Module = null;
      };
 
      function get_mame_files(cfgr, metadata, modulecfg, filelist) {
-       var files = [],
-           bios_files = modulecfg['bios_filenames'];
+       const files = [];
+       const bios_files = modulecfg['bios_filenames'];
        bios_files.forEach(function (fname, i) {
-                            if (fname) {
-                              var title = "Bios File ("+ (i+1) +" of "+ bios_files.length +")";
-                              files.push(cfgr.mountFile('/'+ fname,
-                                                        cfgr.fetchFile(title,
-                                                                       get_bios_url(fname))));
-                            }
-                          });
+         if (fname) {
+           const title = "Bios File ("+ (i+1) +" of "+ bios_files.length +")";
+           files.push(cfgr.mountFile('/'+ fname, cfgr.fetchFile(title, get_bios_url(fname))));
+         }
+       });
 
-       var meta = dict_from_xml(metadata),
-           peripherals = {},
-           game_files_counter = {};
+       const meta = dict_from_xml(metadata);
+       const peripherals = {};
+       const game_files_counter = {};
        files_with_ext_from_filelist(filelist, meta.emulator_ext).forEach(function (file, i) {
-                                                                           game_files_counter[file.name] = 1;
-                                                                           if (modulecfg.peripherals && modulecfg.peripherals[i]) {
-                                                                             peripherals[modulecfg.peripherals[i]] = file.name;
-                                                                           }
-                                                                         });
+           game_files_counter[file.name] = 1;
+           if (modulecfg.peripherals && modulecfg.peripherals[i]) {
+             peripherals[modulecfg.peripherals[i]] = file.name;
+           }
+       });
        meta_props_matching(meta, /^mame_peripheral_([a-zA-Z0-9]+)$/).forEach(function (result) {
-                                                                               var key = result[0], match = result[1];
-                                                                               peripherals[match[1]] = meta[key];
-                                                                               game_files_counter[meta[key]] = 1;
-                                                                             });
+           const key = result[0], match = result[1];
+           peripherals[match[1]] = meta[key];
+           game_files_counter[meta[key]] = 1;
+       });
 
-       var game_files = Object.keys(game_files_counter),
-           len = game_files.length;
+       const game_files = Object.keys(game_files_counter);
+       let len = game_files.length;
        game_files.forEach(function (filename, i) {
-                            var title = "Game File ("+ (i+1) +" of "+ len +")",
-                                url = (filename.includes("/")) ? get_zip_url(filename)
-                                                               : get_zip_url(filename, get_item_name(game));
-                            files.push(cfgr.mountFile('/'+ filename,
-                                                      cfgr.fetchFile(title, url)));
-                          });
+           const title = "Game File ("+ (i+1) +" of "+ len +")";
+           const url = (filename.includes("/")) ? get_zip_url(filename)
+                                                : get_zip_url(filename, get_item_name(game));
+           files.push(cfgr.mountFile('/'+ filename, cfgr.fetchFile(title, url)));
+       });
 
        // add on game drive (.chd) files, if any
        // chd files must go into a subdir named after the driver for mame to find them
-       var drive_files = files_with_ext_from_filelist(filelist, 'chd');  // maybe 'chd' should be meta.drive_ext?
+       const drive_files = files_with_ext_from_filelist(filelist, 'chd');  // maybe 'chd' should be meta.drive_ext?
        len = drive_files.length;
        drive_files.forEach(function (file, i) {
-                             var title = "Game Drive ("+ (i+1) +" of "+ len +")";
-                             var url = (file.name.includes("/")) ? get_zip_url(file.name)
-                                                                 : get_zip_url(file.name, get_item_name(game));
-                             files.push(cfgr.mountFile(modulecfg.driver + '/' + file.name,
-                                                       cfgr.fetchFile(title, url)));
-                           });
+         const title = "Game Drive ("+ (i+1) +" of "+ len +")";
+         const url = (file.name.includes("/")) ? get_zip_url(file.name)
+                                               : get_zip_url(file.name, get_item_name(game));
+         files.push(cfgr.mountFile(modulecfg.driver + '/' + file.name, cfgr.fetchFile(title, url)));
+       });
 
        Object.keys(peripherals).forEach(function (periph) {
-                                          files.push(cfgr.peripheral(periph,                // we're not pushing a 'file' here,
-                                                                     peripherals[periph])); // but that's ok
-                                        });
+         // we're not pushing a 'file' here, but that's ok
+         files.push(cfgr.peripheral(periph, peripherals[periph]));
+       });
 
        files.push(cfgr.mountFile('/'+ modulecfg['driver'] + '.cfg',
                                  cfgr.fetchOptionalFile("CFG File",
