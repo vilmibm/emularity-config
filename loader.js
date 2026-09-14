@@ -105,13 +105,13 @@ globalThis.Module = null;
                                         .setLoad(loadFiles)
                                         .setCallbacks(callbacks);
 
-     var cfgr;
+     let cfgr;
      function loadFiles(fetch_file, splash) {
        splash.setTitle("Downloading game metadata...");
        return new Promise(function (resolve, reject) {
-                            var loading = fetch_file('Game Metadata',
-                                                     get_meta_url(game),
-                                                     'document');
+                            const loading = fetch_file('Game Metadata',
+                                                       get_meta_url(game),
+                                                       'document');
                             loading.then(function (data) {
                                            metadata = data;
                                            splash.setTitle("Downloading game filelist...");
@@ -151,7 +151,7 @@ globalThis.Module = null;
                                            }
 
                                            modulecfg = JSON.parse(data);
-                                           var get_files;
+                                           let get_files;
 
                                            if (module && module.indexOf("dosbox") === 0) {
                                              emulator_logo = images.dosbox;
@@ -212,8 +212,8 @@ globalThis.Module = null;
                                              throw new Error("Unknown module type "+ module +"; cannot configure the emulator.");
                                            }
 
-                                           var wantsWASM = modulecfg.wasm_filename && 'WebAssembly' in globalThis;
-                                           var nr = modulecfg['native_resolution'];
+                                           const wantsWASM = modulecfg.wasm_filename && 'WebAssembly' in globalThis;
+                                           const nr = modulecfg['native_resolution'];
                                            config_args = [cfgr.emulatorJS(get_js_url(wantsWASM ? modulecfg.wasmjs_filename : modulecfg.js_filename)),
                                                           cfgr.emulatorWASM(wantsWASM && get_js_url(modulecfg.wasm_filename)),
                                                           cfgr.locateAdditionalEmulatorJS(locateAdditionalJS),
@@ -231,20 +231,20 @@ globalThis.Module = null;
                                              config_args.push(cfgr.muted(document.cookie.indexOf('unmute=1') < 0)) // we're muted, unless cookie 'unmute' is set
                                            }
 
-                                           var emulator_start_item = metadata.getElementsByTagName("emulator_start").item(0);
+                                           const emulator_start_item = metadata.getElementsByTagName("emulator_start").item(0);
                                            if (module && module.indexOf("dosbox") === 0) {
                                              config_args.push(cfgr.startExe(metadata.getElementsByTagName("emulator_start")
                                                                                     .item(0)
                                                                                     .textContent));
                                            } else if (module && module.indexOf("vice") === 0) {
-                                             var vice_fliplist = [ metadata.getElementsByTagName("vice_drive_8_fliplist").item(0),
+                                             const vice_fliplist = [ metadata.getElementsByTagName("vice_drive_8_fliplist").item(0),
                                                                    metadata.getElementsByTagName("vice_drive_9_fliplist").item(0),
                                                                    metadata.getElementsByTagName("vice_drive_10_fliplist").item(0),
                                                                    metadata.getElementsByTagName("vice_drive_11_fliplist").item(0) ];
                                              if (emulator_start_item) {
                                                config_args.push(cfgr.autoLoad(emulator_start_item.textContent));
                                              }
-                                             var fliplists = [];
+                                             const fliplists = [];
                                              vice_fliplist.forEach(function (fliplist_meta) {
                                                                      if(!fliplist_meta) {
                                                                        fliplists.push(null);
@@ -304,7 +304,7 @@ globalThis.Module = null;
                                            updateLogo();
                                            resolve(cfgr.apply(null, extend(config_args, game_files)));
                                          },
-                                         function (e) {
+                                         function (_e) {
                                            if (splash.failed_loading) {
                                              return;
                                            }
