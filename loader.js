@@ -322,7 +322,7 @@ globalThis.Module = null;
        return get_js_url(filename);
      }
 
-     function get_dosbox_files(cfgr, metadata, modulecfg, filelist) {
+     function get_dosbox_files(cfgr, metadata, _modulecfg, filelist) {
        const default_drive = "c"; // pick any drive letter as a default
        const drives = {};
        const files = [];
@@ -330,7 +330,7 @@ globalThis.Module = null;
        if (game && game.endsWith(".zip")) {
          drives[default_drive] = game;
        }
-       files_with_ext_from_filelist(filelist, meta.emulator_ext).forEach(function (file, i) {
+       files_with_ext_from_filelist(filelist, meta.emulator_ext).forEach(function (file) {
          drives[default_drive] = file.name;
        });
        meta_props_matching(meta, /^dosbox_drive_([a-zA-Z])$/).forEach(function (result) {
