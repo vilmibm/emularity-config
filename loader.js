@@ -2605,8 +2605,13 @@ globalThis.Module = null;
  })();
 
 // legacy
-const JSMESS = JSMESS || {};
-JSMESS.ready = function (f) { f(); };
+
+// TODO I'm not sure this is needed. It's only in one engine's wasm code
+// (mame1943_wasm.js).
+if (!window.JSMESS) {
+  window.JSMESS = {};
+  JSMESS.ready = function (f) { f(); };
+}
 
 // Local Variables:
 // js-indent-level: 2
