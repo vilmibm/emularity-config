@@ -355,40 +355,42 @@ globalThis.Module = null;
      }
 
      function get_vice_files(cfgr, metadata, modulecfg, filelist) {
-       var default_drive = "8",
-           drives = {}, files = [], wanted_files = [],
-           meta = dict_from_xml(metadata);
+       const default_drive = "8";
+       const drives = {};
+       const files = [];
+       const wanted_files = [];
+       const meta = dict_from_xml(metadata);
        files_with_ext_from_filelist(filelist, meta.emulator_ext).forEach(function (file, i) {
-                                                                           wanted_files.push(file.name);
-                                                                         });
+         wanted_files.push(file.name);
+       });
        files_with_ext_from_filelist(filelist, "conf").forEach(function (file, i) {
-                                                                           wanted_files.push(file.name);
-                                                                         });
+         wanted_files.push(file.name);
+       });
        meta_props_matching(meta, /^vice_drive_([89])$/).forEach(function (result) {
-                                                                  var key = result[0], match = result[1];
-                                                                  drives[match[1]] = meta[key];
-                                                                });
+         const key = result[0], match = result[1];
+         drives[match[1]] = meta[key];
+       });
 
-       var len = wanted_files.length;
+       const len = wanted_files.length;
        wanted_files.forEach(function (file, i) {
-                              var title = "Game File ("+ (i+1) +" of "+ len +")",
-                                  filename = file,
-                                  url = (filename.includes("/")) ? get_zip_url(filename)
-                                                                 : get_zip_url(filename, get_item_name(game));
-         
-                              // TODO: Enable and fix zip support.
-                              /*
-                              if (filename.toLowerCase().endsWith(".zip") && false) { // TODO: Enable and fix zip support.
-                                files.push(cfgr.mountZip("", // TODO: This is a hack, no drive actually applicable here
-                                                         cfgr.fetchFile(title, url)));
-                              } else {
-                                //TODO: ensure vice_drive_8 and vice_drive_9 actually function.
-                                files.push(cfgr.mountFile('/'+ filename, cfgr.fetchFile(title, url)));
-                              }
-                              */
-                            //TODO: ensure vice_drive_8 and vice_drive_9 actually function.
-                            files.push(cfgr.mountFile('/'+ filename, cfgr.fetchFile(title, url)));
-                            });
+         const title = "Game File ("+ (i+1) +" of "+ len +")";
+         const filename = file;
+         const url = (filename.includes("/")) ? get_zip_url(filename)
+                                              : get_zip_url(filename, get_item_name(game));
+         /*
+         // TODO: Enable and fix zip support.
+         if (filename.toLowerCase().endsWith(".zip") && false) { // TODO: Enable and fix zip support.
+           files.push(cfgr.mountZip("", // TODO: This is a hack, no drive actually applicable here
+                                    cfgr.fetchFile(title, url)));
+         } else {
+           //TODO: ensure vice_drive_8 and vice_drive_9 actually function.
+           files.push(cfgr.mountFile('/'+ filename, cfgr.fetchFile(title, url)));
+         }
+         */
+
+         //TODO: ensure vice_drive_8 and vice_drive_9 actually function.
+         files.push(cfgr.mountFile('/'+ filename, cfgr.fetchFile(title, url)));
+       });
        return files;
      }
 
