@@ -1254,15 +1254,7 @@ globalThis.Module = null;
                            FS.mkdir('/emulator');
                            FS.mount(BFS, {root: '/'}, '/emulator');
                          },
-                preRun: [function () {
-                            self._hooks.start.forEach(function (f) {
-                                                        //try {
-                                                          f && f();
-                                                        //} catch(x) {
-                                                        //  console.warn(x);
-                                                        //}
-                                                      });
-                          }]
+                preRun: [() => this._hooks.start.forEach((f) => { f && f() })]
               };
    }
 
@@ -1291,6 +1283,7 @@ globalThis.Module = null;
      try {
        mute_protection();
        if (!globalThis.SDL_PauseAudio)
+         // TODO Module is undefined here so this always throws
          globalThis.SDL_PauseAudio = Module.cwrap('SDL_PauseAudio', '', ['number']);
        globalThis.SDL_PauseAudio(true);
      } catch (x) {
