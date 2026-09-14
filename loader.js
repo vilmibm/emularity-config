@@ -331,27 +331,25 @@ globalThis.Module = null;
          drives[default_drive] = game;
        }
        files_with_ext_from_filelist(filelist, meta.emulator_ext).forEach(function (file, i) {
-                                                                           drives[default_drive] = file.name;
-                                                                         });
+         drives[default_drive] = file.name;
+       });
        meta_props_matching(meta, /^dosbox_drive_([a-zA-Z])$/).forEach(function (result) {
-                                                                        const key = result[0], match = result[1];
-                                                                        drives[match[1]] = meta[key];
-                                                                      });
+         const key = result[0], match = result[1];
+         drives[match[1]] = meta[key];
+       });
        const mounts = Object.keys(drives);
        const len = mounts.length;
        mounts.forEach(function (drive, i) {
-                        const title = "Game File ("+ (i+1) +" of "+ len +")";
-                        const filename = drives[drive];
-                        const url = (filename.includes("/")) ? get_zip_url(filename)
-                                                             : get_zip_url(filename, get_item_name(game));
-                            if (filename.toLowerCase().endsWith(".zip")) {
-                              files.push(cfgr.mountZip(drive,
-                                                       cfgr.fetchFile(title, url)));
-                            } else {
-                              files.push(cfgr.mountFile('/'+ filename,
-                                                        cfgr.fetchFile(title, url)));
-                            }
-                      });
+         const title = "Game File ("+ (i+1) +" of "+ len +")";
+         const filename = drives[drive];
+         const url = (filename.includes("/")) ? get_zip_url(filename)
+                                              : get_zip_url(filename, get_item_name(game));
+         if (filename.toLowerCase().endsWith(".zip")) {
+           files.push(cfgr.mountZip(drive, cfgr.fetchFile(title, url)));
+         } else {
+           files.push(cfgr.mountFile('/'+ filename, cfgr.fetchFile(title, url)));
+         }
+       });
        return files;
      }
 
