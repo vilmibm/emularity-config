@@ -91,19 +91,19 @@ globalThis.Module = null;
        }
      }
 
-     var SAMPLE_RATE = (function () {
-                          var audio_ctx = globalThis.AudioContext || globalThis.webkitAudioContext || false;
+     const SAMPLE_RATE = (function () {
+                          const audio_ctx = globalThis.AudioContext || globalThis.webkitAudioContext || false;
                           if (!audio_ctx) {
                             return false;
                           }
-                          var sample = new audio_ctx;
+                          const sample = new audio_ctx;
                           return sample.sampleRate.toString();
                         }());
 
-     var metadata, filelist, module, modulecfg, config_args, emulator_logo,
-         emulator = new Emulator(canvas).setSplashImage(images.ia)
-                                        .setLoad(loadFiles)
-                                        .setCallbacks(callbacks);
+     let metadata, filelist, module, modulecfg, config_args, emulator_logo;
+     const emulator = new Emulator(canvas).setSplashImage(images.ia)
+                                          .setLoad(loadFiles)
+                                          .setCallbacks(callbacks);
 
      let cfgr;
      function loadFiles(fetch_file, splash) {
