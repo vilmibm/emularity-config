@@ -354,16 +354,15 @@ globalThis.Module = null;
        return files;
      }
 
-     function get_vice_files(cfgr, metadata, modulecfg, filelist) {
-       const default_drive = "8";
+     function get_vice_files(cfgr, metadata, _modulecfg, filelist) {
        const drives = {};
        const files = [];
        const wanted_files = [];
        const meta = dict_from_xml(metadata);
-       files_with_ext_from_filelist(filelist, meta.emulator_ext).forEach(function (file, i) {
+       files_with_ext_from_filelist(filelist, meta.emulator_ext).forEach(function (file) {
          wanted_files.push(file.name);
        });
-       files_with_ext_from_filelist(filelist, "conf").forEach(function (file, i) {
+       files_with_ext_from_filelist(filelist, "conf").forEach(function (file) {
          wanted_files.push(file.name);
        });
        meta_props_matching(meta, /^vice_drive_([89])$/).forEach(function (result) {
