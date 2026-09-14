@@ -35,7 +35,7 @@ globalThis.Module = null;
                      before_run: callbacks };
      } else {
        if (typeof callbacks.before_emulator === 'function') {
-         var func = callbacks.before_emulator;
+         const func = callbacks.before_emulator;
          callbacks.before_emulator = function () {
                                        updateLogo();
                                        func();
@@ -46,13 +46,13 @@ globalThis.Module = null;
      }
 
      function img(src) {
-       var img = new Image();
+       const img = new Image();
        img.src = src;
        return img;
      }
 
      // yea, this is a hack
-     var images;
+     let images;
      if (/archive\.org$/.test(document.location.hostname) || /^archive.*\.onion$/.test(document.location.hostname)) {
        images = { ia: img("/images/ialogo.png"),
                   mame: img("/images/mame.png"),
