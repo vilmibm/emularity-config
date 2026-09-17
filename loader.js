@@ -1511,14 +1511,8 @@ globalThis.Module = null;
      cfg.boot_order = game_data.boot_order;
 
      cfg.autostart = true;
-     cfg.wasm_fn = env => {
-       // TODO linter upset about the async; punting until a non-async version
-       // can be thoroughly tested
-       return new Promise(async resolve => {
-         const wasm = await WebAssembly.instantiate(game_data.wasmBinary, env);
-         resolve(wasm.instance.exports);
-       });
-     };
+     cfg.wasm_fn = env =>
+       WebAssembly.instantiate(game_data.wasmBinary, env).then(wasm => wasm.instance.exports);
 
      ["bios", "vga_bios", "fda", "fdb", "cdrom", "hda", "hdb"].forEach(key => {
        if (game_data[key] && game_data[key]["path"]) {
